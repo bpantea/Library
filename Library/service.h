@@ -42,15 +42,15 @@ public:
 	/*
 	Get all books.
 	*/
-	const vector<Book>& getAll() const;
+	SimplyLinkedList<Book>& getAll();
 
 	/*
 	Filter by type
 	*/
-	vector<Book> filter(bool(*cmpFunction)(const Book& b1, const Book& b2), const Book& b2) const noexcept;
+	vector<Book> filter(bool(*cmpFunction)(const Book& b1, const Book& b2), const Book& b2) noexcept;
 
 	/*
 	Sort books
 	*/
-	vector<Book> sortBooks(bool(*lessFunction)(const Book& b1, const Book& b2)) const noexcept;
+	vector<Book> sortBooks(bool(*lessFunction)(const Book& b1, const Book& b2)) noexcept;
 };

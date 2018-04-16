@@ -12,6 +12,7 @@ class Repository
 {
 private:
 	SimplyLinkedList<T> elems;
+	vector<T> v;
 public:
 	/*
 	The constructor of the class Repository.
@@ -32,7 +33,7 @@ public:
 	@param el Element to be searched.
 	@return Position of the element or -1 if it is not present in the list
 	*/
-	int getPosition(const T& el) const;
+	int getPosition(const T& el);
 
 	/*
 	This function modifies an element in the list.
@@ -61,12 +62,13 @@ public:
 	/*
 	@return Element list.
 	*/
-	const vector<T>& getAllElements() const {
-		vector<T> v;
-		v.clear();
-		for (int i = 0; i < elems.size(); i++)
-			v.push_back(elems[i]);
-		return v;
+	SimplyLinkedList<T>& getAllElements() {
+		//v.clear();
+		//for (int i = 0; i < elems.size(); i++)
+		//for(auto it:elems)
+			//v.push_back(it);
+		//return v;
+		return elems;
 	}
 };
 
@@ -79,9 +81,9 @@ inline void Repository<T>::add(const T& el)
 }
 
 template<typename T>
-inline int Repository<T>::getPosition(const T& el) const
+inline int Repository<T>::getPosition(const T& el)
 {
-	for (unsigned i = 0; i < elems.size(); i++)
+	for (int i = 0; i < elems.size(); i++)
 		if (elems[i] == el)
 			return i;
 	return -1;
@@ -103,5 +105,5 @@ inline void Repository<T>::remove(const T& element)
 	int index = getPosition(element);
 	if (index == -1)
 		throw RepositoryException("Element not found.");
-	elems.erase(elems.begin() + index);
+	elems.erase(index);
 }

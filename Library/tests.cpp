@@ -128,20 +128,20 @@ void Tests::testServiceFilter()
 	assert(v.size() == 2);
 }
 
-void testLinkedList()
+void Tests::testLinkedList()
 {
 	SimplyLinkedList<int> v{};
-	//assert(v.size() == 0);
+	assert(v.size() == 0);
 	v.push_back(1);
-	//assert(v.size() == 1);
-	//assert(v[0] == 1);
+	assert(v.size() == 1);
+	assert(v[0] == 1);
 	v.push_back(2);
-	//assert(v[1] == 2);
-	//assert(v.size() == 2);
+	assert(v[1] == 2);
+	assert(v.size() == 2);
 	v.push_back(3);
-	//v[0] = 4;
-	//assert(v[0] == 4);
-	//assert(v[2] == 3);
+	v[0] = 4;
+	assert(v[0] == 4);
+	assert(v[2] == 3);
 	
 	
 	v.erase(0);
@@ -161,6 +161,19 @@ void testLinkedList()
 
 	v.erase(1);
 	v.erase(0);
+
+	try
+	{
+		v.erase(100);
+		assert(false);
+	}
+	catch (LinkedListException) {}
+	try
+	{
+		v[100] = 1;
+		assert(false);
+	}
+	catch (LinkedListException) {}
 }
 
 void Tests::run()

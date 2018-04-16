@@ -21,7 +21,7 @@ private:
 	/*
 	Print all elements
 	*/
-	void printAllElemsUI() const;
+	void printAllElemsUI();
 
 	/*
 	Print a book.

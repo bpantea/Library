@@ -25,12 +25,12 @@ void Service::remove(const string& title, const string& author)
 	repo.remove(b);
 }
 
-const vector<Book>& Service::getAll() const
+SimplyLinkedList<Book>& Service::getAll()
 {
 	return repo.getAllElements();
 }
 
-vector<Book> Service::filter(bool(*cmpFunction)(const Book& b1, const Book& b2), const Book& b2) const noexcept
+vector<Book> Service::filter(bool(*cmpFunction)(const Book& b1, const Book& b2), const Book& b2) noexcept
 {
 	vector<Book> v;
 	v.clear();
@@ -40,9 +40,11 @@ vector<Book> Service::filter(bool(*cmpFunction)(const Book& b1, const Book& b2),
 	return v;
 }
 
-vector<Book> Service::sortBooks(bool(*lessFunction)(const Book& b1, const Book& b2)) const noexcept
+vector<Book> Service::sortBooks(bool(*lessFunction)(const Book& b1, const Book& b2)) noexcept
 {
-	vector<Book> v{ repo.getAllElements() };
+	vector<Book> v;
+	for (const auto& it : repo.getAllElements())
+		v.push_back(it);
 	sort(v.begin(), v.end(), lessFunction);
 	return v;
 }

@@ -31,7 +31,7 @@ void UI::addUI()
 	service.add(title, author, genre, year);
 }
 
-void UI::printAllElemsUI() const
+void UI::printAllElemsUI()
 {
 	cout << '\n';
 	for (const auto& book : service.getAll())
@@ -125,7 +125,7 @@ void UI::initializeBooks()
 
 void UI::run()
 {
-	initializeBooks();
+	//initializeBooks();
 	while (true)
 	{
 		printMenu();

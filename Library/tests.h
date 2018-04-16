@@ -43,6 +43,11 @@ private:
 	*/
 	void testServiceFilter();
 
+	/*
+	Test LinkedList data-type.
+	*/
+	void testLinkedList();
+
 public:
 	/*
 	Run all tests.
