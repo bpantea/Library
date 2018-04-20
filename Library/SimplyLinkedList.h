@@ -65,6 +65,25 @@ private:
 	Node<T> *last;
 	int n;
 
+	void copyList(const SimplyLinkedList<T>& other) {
+		first = NULL;
+		last = NULL;
+		n = 0;
+		Node<T>* x = other.first;
+		while (x != NULL) {
+			push_back(x->getValue());
+			x = x->getNext();
+		}
+	}
+
+	void destroyList() {
+		while (first != NULL) {
+			Node<T> *q = first;
+			first = first->getNext();
+			delete q;
+		}
+	}
+
 public:
 	/*
 	Constructor for SimplyLinkedList class.
@@ -75,14 +94,17 @@ public:
 	}
 
 	/*
+	Copy constructor for SimplyLinkedList class.
+	*/
+	SimplyLinkedList(const SimplyLinkedList<T>& other) {
+		copyList(other);
+	}
+
+	/*
 	Destructor for SimplyLinkedList class.
 	*/
 	~SimplyLinkedList() {
-		while (first != NULL) {
-			Node<T> *q = first;
-			first = first->getNext();
-			delete q;
-		}
+		destroyList();
 	}
 
 	friend class IteratorSimplyLinkedList<T>;
@@ -116,6 +138,17 @@ public:
 	Overrides operator[] for the class.
 	*/
 	T& operator[](int index);
+
+	/*
+	Overrides = operator.
+	*/
+	SimplyLinkedList<T>& operator=(const SimplyLinkedList<T>& other) {
+		if (this == &other)
+			return *this;
+		destroyList();
+		copyList(other);
+		return *this;
+	}
 
 	/*
 	Returnes number of elements in the list.

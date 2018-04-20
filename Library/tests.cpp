@@ -131,6 +131,7 @@ void Tests::testServiceFilter()
 void Tests::testLinkedList()
 {
 	SimplyLinkedList<int> v{};
+	v = v;
 	assert(v.size() == 0);
 	v.push_back(1);
 	assert(v.size() == 1);
@@ -139,9 +140,16 @@ void Tests::testLinkedList()
 	assert(v[1] == 2);
 	assert(v.size() == 2);
 	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+	v.erase(4);
+	v.erase(3);
 	v[0] = 4;
 	assert(v[0] == 4);
 	assert(v[2] == 3);
+
+	SimplyLinkedList<int> vCopy{ v };
+	vCopy = v;
 	
 	
 	v.erase(0);
