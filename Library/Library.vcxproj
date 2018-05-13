@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CppCoreCheck.14.0.24210.1\build\native\Microsoft.CppCoreCheck.props" Condition="Exists('..\packages\Microsoft.CppCoreCheck.14.0.24210.1\build\native\Microsoft.CppCoreCheck.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -73,17 +72,27 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>CppCoreCheckRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableCppCoreCheck>false</EnableCppCoreCheck>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>CppCoreCheckRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableCppCoreCheck>false</EnableCppCoreCheck>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>CppCoreCheckRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableCppCoreCheck>false</EnableCppCoreCheck>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>CppCoreCheckRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableCppCoreCheck>false</EnableCppCoreCheck>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -96,6 +105,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <EnablePREfast>false</EnablePREfast>
+      <AdditionalIncludeDirectories>C:\Qt\5.10.1\msvc2017_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,6 +120,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <EnablePREfast>false</EnablePREfast>
+      <AdditionalIncludeDirectories>C:\Qt\5.10.1\msvc2017_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,6 +138,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <EnablePREfast>false</EnablePREfast>
+      <AdditionalIncludeDirectories>C:\Qt\5.10.1\msvc2017_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +158,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <EnablePREfast>false</EnablePREfast>
+      <AdditionalIncludeDirectories>C:\Qt\5.10.1\msvc2017_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,13 +173,12 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="repository.h" />
     <ClInclude Include="service.h" />
-    <ClInclude Include="SimplyLinkedList.h" />
     <ClInclude Include="tests.h" />
     <ClInclude Include="ui.h" />
+    <ClInclude Include="undo.h" />
     <ClInclude Include="validator.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="book.cpp" />
     <ClCompile Include="Library.cpp" />
     <ClCompile Include="service.cpp" />
     <ClCompile Include="tests.cpp" />
@@ -173,17 +188,17 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="books.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets" Condition="Exists('..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets')" />
-    <Import Project="..\packages\Microsoft.CppCoreCheck.14.0.24210.1\build\native\Microsoft.CppCoreCheck.targets" Condition="Exists('..\packages\Microsoft.CppCoreCheck.14.0.24210.1\build\native\Microsoft.CppCoreCheck.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CppCoreCheck.14.0.24210.1\build\native\Microsoft.CppCoreCheck.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CppCoreCheck.14.0.24210.1\build\native\Microsoft.CppCoreCheck.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CppCoreCheck.14.0.24210.1\build\native\Microsoft.CppCoreCheck.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CppCoreCheck.14.0.24210.1\build\native\Microsoft.CppCoreCheck.targets'))" />
   </Target>
 </Project>

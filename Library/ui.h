@@ -6,7 +6,7 @@
 class UI
 {
 private:
-	Service service;
+	Service& service;
 
 	/*
 	Print user options.
@@ -62,18 +62,53 @@ private:
 	Sort books by genre.
 	*/
 	void sortGenre();
+
+	/*
+	Add book to cart by title.
+	*/
+	void addToCart();
+
+	/*
+	Clear cart.
+	*/
+	void clearCart();
+
+	/*
+	Add cart random.
+	*/
+	void randomFillCart();
+
+	/*
+	Print all books in cart.
+	*/
+	void printCart();
 public:
 	/*
 	Constructor of UI class.
 	*/
-	UI() {
-		service = Service();
-	}
+	UI(Service& service) noexcept : service{ service } {}
 
 	/*
 	Add some books.
 	*/
 	void initializeBooks();
+
+	/*
+	Undo function.
+	*/
+	void undo() {
+		service.undo();
+	}
+
+	/*
+	Export cart to html file.
+	*/
+	void exportHtml();
+
+	/*
+	Export cart to cvs file.
+	*/
+	void exportCvs();
 
 	/*
 	Run the UI Console.

@@ -2,25 +2,42 @@
 #include <string>
 #include <vector>
 
-class RepositoryException
+class Exception
 {
-private:
+protected:
 	std::string message;
 public:
 	/*
-	Constructor for RepositoryException class.
+	Constructor for Exception class.
 	*/
-	RepositoryException(const std::string& message) : message{message} {}
+	Exception(const std::string& message) : message{ message } {}
 
 	/*
 	Gets the string message.
 	*/
-	std::string getMessage() const {
+	virtual std::string getMessage() const {
 		return message;
 	}
 };
 
-class ValidateException
+
+class RepositoryException : public Exception
+{
+public:
+	/*
+	Constructor for RepositoryException class.
+	*/
+	RepositoryException(const std::string& message) : Exception{message} {}
+
+	/*
+	Gets the string message.
+	*/
+	std::string getMessage() const override {
+		return message;
+	}
+};
+
+class ValidateException : public Exception
 {
 private:
 	std::vector<std::string> messages;
@@ -28,12 +45,12 @@ public:
 	/*
 	Constructor for ValidateException class.
 	*/
-	ValidateException(const std::vector<std::string>& messages) : messages{ messages } {}
+	ValidateException(const std::vector<std::string>& messages) : messages{ messages }, Exception{ getMessage() } {}
 
 	/*
 	Gets the string message.
 	*/
-	std::string getMessage() const {
+	std::string getMessage() const override {
 		std::string s = "";
 		for (const auto& msg : messages)
 			s += msg + "\n";
@@ -41,20 +58,18 @@ public:
 	}
 };
 
-class LinkedListException
+class LinkedListException : public Exception
 {
-private:
-	std::string message;
 public:
 	/*
 	Constructor for LinkedListException class.
 	*/
-	LinkedListException(const std::string& message) : message{ message } {}
+	LinkedListException(const std::string& message) : Exception{ message } {}
 
 	/*
 	Gets the string message.
 	*/
-	std::string getMessage() const {
+	std::string getMessage() const override {
 		return message;
 	}
 };

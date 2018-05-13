@@ -1,4 +1,6 @@
 #include "tests.h"
+#include <sstream>
+#include <iostream>
 
 void Tests::testBook()
 {
@@ -14,6 +16,17 @@ void Tests::testBook()
 	b2.setTitle("title2");
 	b2.setAuthor("Ion");
 	assert(b == b2);
+
+
+	/*Test stream operators*/
+	stringstream out;
+	b = Book{ "a", "a", "a", 1 };
+	out << b;
+	assert(out.str() == "a,a,a,1,");
+	istringstream in("a,a,a,1,");
+	in >> b;
+	assert(b.getAuthor() == "a");
+	assert(b.getYear() == 1);
 }
 
 void Tests::testRepository()
@@ -36,7 +49,9 @@ void Tests::testRepository()
 		repo.remove(1);
 		assert(false);
 	}
-	catch (RepositoryException) {}
+	catch (Exception& ex) {
+		assert(ex.getMessage().size() != 0);
+	}
 	try
 	{
 		repo.modify(1, 2);
@@ -73,7 +88,8 @@ void testValidator()
 
 void Tests::testServiceAdd()
 {
-	Service serv{};
+	Repository<Book> repo{};
+	Service serv{ repo };
 	serv.add("a", "b", "c", 2000);
 	try
 	{
@@ -85,22 +101,24 @@ void Tests::testServiceAdd()
 
 void Tests::testServiceModify()
 {
-	Service serv{};
+	Repository<Book> repo{};
+	Service serv{ repo };
 	serv.add("a", "a", "genre", 100);
 	serv.modify("a", "a", "aa", "aa", "genre", 200);
 	try {
 		serv.modify("a", "a", "aa", "aa", "genre", 200);
 	}
-	catch (RepositoryException) {}
+	catch (Exception&) {}
 }
 
 void Tests::testServiceRemove()
 {
-	Service serv{};
+	Repository<Book> repo{};
+	Service serv{ repo };
 	try {
 		serv.remove("a", "a");
 	}
-	catch (RepositoryException) {}
+	catch (Exception&) {}
 	serv.add("a", "a", "c", 0);
 	serv.remove("a", "a");
 	assert(serv.getAll().size() == 0);
@@ -108,7 +126,8 @@ void Tests::testServiceRemove()
 
 void Tests::testServiceSort()
 {
-	Service serv{};
+	Repository<Book> repo{};
+	Service serv{ repo };
 	serv.add("a", "a", "a", 11);
 	serv.add("c", "b", "b", 3);
 	serv.add("b", "c", "a", 1);
@@ -119,15 +138,19 @@ void Tests::testServiceSort()
 
 void Tests::testServiceFilter()
 {
-	Service serv{};
+	Repository<Book> repo{};
+	Service serv{ repo };
 	serv.add("a", "a", "a", 11);
 	serv.add("c", "b", "b", 3);
-	serv.add("a", "c", "a", 1);
-	assert(serv.filter(Book::compareTitle, Book{ "a", "", "", 0 }).size() == 2);
+	serv.add("d", "c", "a", 1);
+	assert(serv.filter(Book::compareTitle, Book{ "a", "", "", 0 }).size() == 1);
 	vector<Book> v = serv.filter(Book::compareYear, Book{ "", "", "", 3 });
 	assert(v.size() == 2);
 }
 
+
+
+/*
 void Tests::testLinkedList()
 {
 	SimplyLinkedList<int> v{};
@@ -183,6 +206,147 @@ void Tests::testLinkedList()
 	}
 	catch (LinkedListException) {}
 }
+*/
+
+void Tests::testCart()
+{
+	Repository<Book> repo{};
+	Service serv{ repo };
+	serv.add("a", "a", "a", 11);
+	serv.add("c", "b", "b", 3);
+	serv.add("b", "c", "a", 1);
+	serv.addToCart("a");
+	serv.addToCart("b");
+	assert(serv.getCartSize() == 2);
+	serv.clearCart();
+	assert(serv.getCartSize() == 0);
+	serv.generateCart(3);
+	assert(serv.getCartSize() == 3);
+	vector<Book> v{ serv.getCart() };
+	assert(v.size() == 3);
+	try
+	{
+		serv.generateCart(4);
+		assert(false);
+	}
+	catch (RepositoryException&)
+	{}
+}
+
+void Tests::testUndo()
+{
+	MapRepository<Book> repo{};
+	Service serv{ repo };
+	serv.add("a", "a", "a", 11);
+	serv.add("c", "b", "b", 3);
+	serv.add("b", "c", "a", 1);
+	serv.modify("a", "a", "A", "A", "a", 11);
+	serv.remove("A", "A");
+	serv.undo();
+	serv.undo();
+	serv.undo();
+	serv.undo();
+	serv.undo();
+	try
+	{
+		serv.undo();
+		assert(false);
+	}
+	catch (Exception& ex)
+	{
+		assert(ex.getMessage().size() != 0);
+	}
+}
+
+void Tests::testMapRepository()
+{
+	MapRepository<int> repo{};
+	repo.clearRepository();
+
+	repo.add(1);
+	assert(repo.getSize() == 1);
+	try
+	{
+		repo.getElement(-1);
+		assert(false);
+	}
+	catch (Exception&) {}
+
+	try
+	{
+		repo.add(1);
+		assert(false);
+	}
+	catch (RepositoryException) {}
+	repo.modify(1, 2);
+	repo.add(1);
+	repo.remove(1);
+	assert(repo.getAllElements().size() == 1);
+	try
+	{
+		repo.remove(1);
+		assert(false);
+	}
+	catch (Exception& ex) {
+		assert(ex.getMessage().size() != 0);
+	}
+	try
+	{
+		repo.modify(1, 2);
+		assert(false);
+	}
+	catch (RepositoryException& ex) {
+		assert(ex.getMessage().size() != 0);
+	}
+}
+
+void Tests::testFileRepository()
+{
+	const string& fileName = "test.txt";
+	ofstream g(fileName, std::ios::trunc);
+	g.close();
+	FileRepository<int> repo{ fileName };
+	repo.add(1);
+	repo.modify(1, 2);
+	repo.remove(2);
+	assert(repo.getSize() == 0);
+}
+
+void Tests::testExport()
+{
+	const string& fileName = "test.txt";
+	ofstream g(fileName, std::ios::trunc);
+	g.close();
+	FileRepository<Book> repo{"test.txt"};
+	Service serv{ repo };
+	serv.add("a", "a", "a", 11);
+	serv.add("c", "b", "b", 3);
+	serv.add("b", "c", "a", 1);
+	serv.generateCart(3);
+	serv.exportCartToCSV("test.csv");
+	try {
+		serv.exportCartToCSV("");
+	} catch (Exception&) {}
+	serv.exportCartToHtml("test.html");
+	try {
+		serv.exportCartToHtml("");
+	} catch (Exception&) {}
+}
+
+void Tests::testThrowMapRepository()
+{
+	int added = 0;
+	MapRepository<int> repo{ 0.5 };
+	for (int i = 0; i < 10; i++)
+	{
+		try {
+			repo.add(i);
+			added++;
+		}
+		catch (Exception&) {}
+	}
+	cout << added;
+}
 
 void Tests::run()
 {
@@ -194,6 +358,11 @@ void Tests::run()
 	testServiceSort();
 	testServiceFilter();
 	testValidator();
-
-	testLinkedList();
+	testCart();
+	//testLinkedList();
+	testUndo();
+	testMapRepository();
+	testFileRepository();
+	testExport();
+	testThrowMapRepository();
 }

@@ -12,6 +12,13 @@ void UI::printMenu() const
 	cout << "7. Sort by title. \n";
 	cout << "8. Sort by author. \n";
 	cout << "9. Sort by genre + year. \n";
+	cout << "10. Add book to cart. \n";
+	cout << "11. Free cart. \n";
+	cout << "12. Generate cart. \n";
+	cout << "13. Print cart. \n";
+	cout << "14. Undo. \n";
+	cout << "15. Export to html. \n";
+	cout << "16. Export to cvs. \n";
 	cout << "0. Exit. \n";
 	cout << '\n';
 }
@@ -116,6 +123,35 @@ void UI::sortGenre()
 	cout << '\n';
 }
 
+void UI::addToCart()
+{
+	string title;
+	cout << "Title: ";
+	getline(cin, title);
+	service.addToCart(title);
+}
+
+void UI::clearCart()
+{
+	service.clearCart();
+}
+
+void UI::randomFillCart()
+{
+	int size;
+	cout << "Size: ";
+	cin >> size;
+	service.generateCart(size);
+}
+
+void UI::printCart()
+{
+	cout << '\n';
+	for (const auto& b : service.getCart())
+		printBook(b);
+	cout << '\n';
+}
+
 void UI::initializeBooks()
 {
 	service.add("Moara cu noroc", "Ioan Slavici", "nuvela", 1880);
@@ -123,9 +159,24 @@ void UI::initializeBooks()
 	service.add("Maitreyi", "Eliade", "roman", 1933);
 }
 
+void UI::exportHtml()
+{
+	string fileName;
+	cout << "File name: ";
+	cin >> fileName;
+	service.exportCartToHtml(fileName);
+}
+
+void UI::exportCvs()
+{
+	string fileName;
+	cout << "File name: ";
+	cin >> fileName;
+	service.exportCartToCSV(fileName);
+}
+
 void UI::run()
 {
-	//initializeBooks();
 	while (true)
 	{
 		printMenu();
@@ -154,11 +205,22 @@ void UI::run()
 				sortAuthor();
 			if (command == 9)
 				sortGenre();
+			if (command == 10)
+				addToCart();
+			if (command == 11)
+				clearCart();
+			if (command == 12)
+				randomFillCart();
+			if (command == 13)
+				printCart();
+			if (command == 14)
+				undo();
+			if (command == 15)
+				exportHtml();
+			if (command == 16)
+				exportCvs();
 		}
-		catch (RepositoryException& ex) {
-			cout << '\n' << ex.getMessage() << '\n';
-		}
-		catch (ValidateException& ex) {
+		catch (Exception& ex) {
 			cout << '\n' << ex.getMessage() << '\n';
 		}
 	}

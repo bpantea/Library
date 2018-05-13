@@ -36,15 +36,12 @@
     <ClInclude Include="validator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SimplyLinkedList.h">
+    <ClInclude Include="undo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Library.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="book.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="service.cpp">
@@ -62,5 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="books.txt" />
   </ItemGroup>
 </Project>

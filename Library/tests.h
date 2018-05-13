@@ -3,7 +3,6 @@
 #include "service.h"
 #include <cassert>
 #include "exceptions.h"
-#include "SimplyLinkedList.h"
 
 class Tests
 {
@@ -46,7 +45,37 @@ private:
 	/*
 	Test LinkedList data-type.
 	*/
-	void testLinkedList();
+	//void testLinkedList();
+
+	/*
+	Test Cart functions.
+	*/
+	void testCart();
+
+	/*
+	Test undo.
+	*/
+	void testUndo();
+
+	/*
+	Test MapRepository.
+	*/
+	void testMapRepository();
+
+	/*
+	Test FileRepository.
+	*/
+	void testFileRepository();
+
+	/*
+	Test exportOptions.
+	*/
+	void testExport();
+
+	/*
+	Test throw MapRepository
+	*/
+	void testThrowMapRepository();
 
 public:
 	/*
